@@ -2,7 +2,7 @@ name: CI
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 16 * * *"
+    - cron: '0 16 * * *'  # UTC 16:00 = GMT+8 00:00
 
 jobs:
   check:
