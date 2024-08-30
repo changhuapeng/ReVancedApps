@@ -3,10 +3,10 @@ MODNAME="${MODDIR##*/}"
 TMPFILE="/data/adb/modules/$MODNAME/module.prop"
 . "$MODDIR/utils.sh"
 
-while [ "$(resetprop sys.boot_completed)" != 1 ]; do sleep 1; done
+while [ "$(getprop sys.boot_completed)" != 1 ]; do sleep 1; done
 while [ -d "/sdcard/Android" ]; do sleep 1; done
 while
-    BASEPATH=$(pm path "$PKG_NAME")
+    BASEPATH=$(pm path "$PKG_NAME" 2>&1 </dev/null)
     svcl=$?
     [ $svcl = 20 ]
 do sleep 2; done

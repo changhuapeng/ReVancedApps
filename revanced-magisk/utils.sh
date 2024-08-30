@@ -1,7 +1,7 @@
 . "$MODDIR/config"
 
 check_app() {
-    if BASEPATH=$(pm path "$PKG_NAME"); then
+    if BASEPATH=$(pm path "$PKG_NAME" 2>&1 </dev/null); then
         BASEPATH=${BASEPATH##*:} BASEPATH=${BASEPATH%/*}
 
         if [ ! -d "$BASEPATH/lib" ]; then

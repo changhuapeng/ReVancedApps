@@ -51,7 +51,7 @@ prepareEnterMntNs() {
 
 EnterMntNs() {
     # this function will be run when mount namespace of app process is unshared
-    BASEPATH=$(pm path "$PKG_NAME")
+    BASEPATH=$(pm path "$PKG_NAME" 2>&1 </dev/null)
     BASEPATH=${BASEPATH##*:} BASEPATH=${BASEPATH%/*}
     . "$MODDIR/mount.sh"
     exit 1 # close script
