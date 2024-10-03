@@ -9,7 +9,7 @@ rv-brand = "RVX"
 
 # you can use rvmm-config-gen to generate a config
 
-[YouTube-Extended-Stable]
+[YouTube-Extended-Recommended]
 app-name = "YouTube"
 enabled = true
 version = "auto"
@@ -21,10 +21,10 @@ module-prop-name="yt-rvx"
 arch = "all"
 riplib = true
 
-[YouTube-Extended-Latest]
+[YouTube-Extended]
 app-name = "YouTube"
 enabled = true
-version = "latest"
+version = "19.30.39"
 include-stock = true
 build-mode = "both"
 apkmirror-dlurl = "https://www.apkmirror.com/apk/google-inc/youtube"

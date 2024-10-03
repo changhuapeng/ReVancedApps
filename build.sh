@@ -164,7 +164,6 @@ wait
 rm -rf temp/tmp.*
 if [ -z "$(ls -A1 "${BUILD_DIR}")" ]; then abort "All builds failed."; fi
 
-log "\nYouTube-Extended-Latest may not work due to patches compatibility"
 log "\nInstall [Microg](https://github.com/ReVanced/GmsCore/releases) for non-root YouTube and YT Music APKs"
 log "Requires [Process Monitor Tool](https://github.com/HuskyDG/magic_proc_monitor) (v2.3 or higher) for dynamic mounting if you are using the magisk modules"
 log "Use [zygisk-detach](https://github.com/j-hc/zygisk-detach) to detach root ReVanced YouTube and YT Music from Play Store"
