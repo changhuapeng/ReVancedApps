@@ -10,6 +10,13 @@ if [ "${GITHUB_TOKEN-}" ]; then GH_HEADER="Authorization: token ${GITHUB_TOKEN}"
 NEXT_VER_CODE=${NEXT_VER_CODE:-$(date +'%Y%m%d')}
 OS=$(uname -o)
 
+if [ "${KEYSTORE_BASE64-}" ]; then echo ${KEYSTORE_BASE64} | base64 -d > "keystore.jks"; else KEYSTORE_FILE="ks.keystore"; fi
+KEYSTORE_FILE=${KEYSTORE_FILE:-keystore.jks}
+KEYSTORE_PASSWORD=${KEYSTORE_PASSWORD:-123456789}
+KEY_ALIAS=${KEY_ALIAS:-jhc}
+KEY_PASSWORD=${KEY_PASSWORD:-123456789}
+SIGNER=${SIGNER:-jhc}
+
 toml_prep() {
 	if [ ! -f "$1" ]; then return 1; fi
 	if [ "${1##*.}" == toml ]; then
@@ -432,8 +439,13 @@ get_archive_pkg_name() { echo "$__ARCHIVE_PKG_NAME__"; }
 
 patch_apk() {
 	local stock_input=$1 patched_apk=$2 patcher_args=$3 rv_cli_jar=$4 rv_patches_jar=$5
-	local cmd="env -u GITHUB_REPOSITORY java -jar $rv_cli_jar patch $stock_input --purge -o $patched_apk -p $rv_patches_jar --keystore=ks.keystore \
---keystore-entry-password=123456789 --keystore-password=123456789 --signer=jhc --keystore-entry-alias=jhc $patcher_args"
+	local cmd="env -u GITHUB_REPOSITORY java -jar $rv_cli_jar patch $stock_input --purge -o $patched_apk -p $rv_patches_jar \
+		--keystore=${KEYSTORE_FILE} \
+		--keystore-password=\"${KEYSTORE_PASSWORD}\" \
+		--keystore-entry-alias=\"${KEY_ALIAS}\" \
+		--keystore-entry-password=\"${KEY_PASSWORD}\" \
+		--signer=\"${SIGNER}\" \
+		$patcher_args"
 	if [ "$OS" = Android ]; then cmd+=" --custom-aapt2-binary=${AAPT2}"; fi
 	pr "$cmd"
 	if eval "$cmd"; then [ -f "$patched_apk" ]; else
