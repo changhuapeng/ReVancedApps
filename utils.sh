@@ -11,6 +11,13 @@ if [ "${GITHUB_TOKEN-}" ]; then GH_HEADER="Authorization: token ${GITHUB_TOKEN}"
 NEXT_VER_CODE=${NEXT_VER_CODE:-$(date +'%Y%m%d')}
 OS=$(uname -o)
 
+if [ "${KEYSTORE_BASE64-}" ]; then echo ${KEYSTORE_BASE64} | base64 -d > "keystore.jks"; else KEYSTORE_FILE="ks.keystore"; fi
+KEYSTORE_FILE=${KEYSTORE_FILE:-keystore.jks}
+KEYSTORE_PASSWORD=${KEYSTORE_PASSWORD:-123456789}
+KEY_ALIAS=${KEY_ALIAS:-jhc}
+KEY_PASSWORD=${KEY_PASSWORD:-123456789}
+SIGNER=${SIGNER:-jhc}
+
 toml_prep() {
 	if [ ! -f "$1" ]; then return 1; fi
 	if [ "${1##*.}" == toml ]; then
@@ -546,8 +553,13 @@ patch_apk() {
 	local tmp_files
 	tmp_files="$(pwd)/$(mktemp -d -p "$TEMP_DIR")"
 
-	local cmd="java -jar '$cli_jar' patch '$stock_input' --purge -o '$patched_apk' -p '$patches_jar' --keystore=ks.keystore \
---keystore-entry-password=123456789 --keystore-password=123456789 --signer=jhc --keystore-entry-alias=jhc -t '$tmp_files' $patcher_args"
+	local cmd="java -jar '$cli_jar' patch '$stock_input' --purge -o '$patched_apk' -p '$patches_jar' \
+--keystore=\"${KEYSTORE_FILE}\" \
+--keystore-password=\"${KEYSTORE_PASSWORD}\" \
+--keystore-entry-alias=\"${KEY_ALIAS}\" \
+--keystore-entry-password=\"${KEY_PASSWORD}\" \
+--signer=\"${SIGNER}\" \
+-t '$tmp_files' $patcher_args"
 
 	# TODO: remove this later
 	local cli_name
