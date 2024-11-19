@@ -159,7 +159,7 @@ config_update() {
 			else
 				last_patches=$(gh_req "$rv_rel/tags/${ver}" -)
 			fi
-			if ! last_patches=$(jq -e -r '.assets[] | select(.name | endswith("rvp")) | .name' <<<"$last_patches"); then
+			if ! last_patches=$(jq -e -r '.assets[] | select(.name | endswith("rvp") or endswith("jar")) | .name' <<<"$last_patches"); then
 				abort oops
 			fi
 			if [ "$last_patches" ]; then
