@@ -1,6 +1,6 @@
 {
-  "version": "v7.16.53 (patches: 5.4.2)",
-  "versionCode": 10,
-  "zipUrl": "https://github.com/changhuapeng/ReVancedApps/releases/download/10/yt-music-rvx-magisk-v7.16.53-arm-v7a.zip",
+  "version": "v7.16.53 (patches: 5.5.1)",
+  "versionCode": 11,
+  "zipUrl": "https://github.com/changhuapeng/ReVancedApps/releases/download/11/yt-music-rvx-magisk-v7.16.53-arm-v7a.zip",
   "changelog": "https://raw.githubusercontent.com/changhuapeng/ReVancedApps/update/build.md"
 }
