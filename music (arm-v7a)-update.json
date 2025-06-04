@@ -1,6 +1,6 @@
 {
-  "version": "v8.05.51 (patches: 5.25.0)",
-  "versionCode": 16,
-  "zipUrl": "https://github.com/changhuapeng/ReVancedApps/releases/download/16/yt-music-revanced-magisk-v8.05.51-arm-v7a.zip",
+  "version": "v8.05.51 (patches: 5.26.0)",
+  "versionCode": 17,
+  "zipUrl": "https://github.com/changhuapeng/ReVancedApps/releases/download/17/yt-music-revanced-magisk-v8.05.51-arm-v7a.zip",
   "changelog": "https://raw.githubusercontent.com/changhuapeng/ReVancedApps/update/build.md"
 }
