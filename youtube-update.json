@@ -1,6 +1,6 @@
 {
-  "version": "v20.13.41 (patches 5.31.0)",
-  "versionCode": 22,
-  "zipUrl": "https://github.com/changhuapeng/ReVancedApps/releases/download/22/youtube-revanced-magisk-v20.13.41-all.zip",
+  "version": "v20.13.41 (patches 5.31.1)",
+  "versionCode": 23,
+  "zipUrl": "https://github.com/changhuapeng/ReVancedApps/releases/download/23/youtube-revanced-magisk-v20.13.41-all.zip",
   "changelog": "https://raw.githubusercontent.com/changhuapeng/ReVancedApps/update/build.md"
 }
