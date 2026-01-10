@@ -173,6 +173,28 @@ am force-stop "$PKG_NAME"
 ui_print "* Optimizing $PKG_NAME"
 nohup cmd package compile --reset "$PKG_NAME" >/dev/null 2>&1 &
 
+if [ "$KSU" = "true" ]; then
+    ui_print "* Configuring KernelSU profile..."
+
+    UID=$(dumpsys package "$PKG_NAME" | grep -m1 "userId")
+    if [ -z "$UID" ]; then
+        UID=$(dumpsys package "$PKG_NAME" | grep -m1 "uid")
+    fi
+
+    UID=${UID#*=}
+    UID=${UID%% *}
+
+    if [ -n "$UID" ]; then
+        if ! OP=$("${MODPATH:?}/bin/$ARCH/ksu_profile" "$UID" "$PKG_NAME" 2>&1); then
+            ui_print "! ERROR ksu_profile: $OP"
+        else
+            ui_print "  - Profile applied successfully"
+        fi
+    else
+        ui_print "! Failed to detect UID for KernelSU profile"
+    fi
+fi
+
 rm -rf "${MODPATH:?}/bin" "$MODPATH/$PKG_NAME.apk"
 
 ui_print "* Done"
