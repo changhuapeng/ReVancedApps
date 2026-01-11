@@ -154,6 +154,7 @@ set_prebuilts() {
 	HTMLQ="${BIN_DIR}/htmlq/htmlq-${arch}"
 	AAPT2="${BIN_DIR}/aapt2/aapt2-${arch}"
 	TOML="${BIN_DIR}/toml/tq-${arch}"
+	ZIPALIGN="${BIN_DIR}/zipalign/zipalign-${arch}"
 }
 
 config_update() {
@@ -635,6 +636,28 @@ build_rv() {
 				epr "Building '${table}' failed!"
 				return 0
 			fi
+		fi
+		if command -v $ZIPALIGN >/dev/null; then
+			pr "Repack Arsc -> Zipalign -> Resign..."
+
+			if unzip -l "$patched_apk" | grep -q "resources.arsc"; then
+				unzip -qo "$patched_apk" "resources.arsc"
+				zip -d "$patched_apk" "resources.arsc" >/dev/null
+				zip -0gq "$patched_apk" "resources.arsc"
+				rm "resources.arsc"
+			fi
+
+			$ZIPALIGN -p -f 4 "$patched_apk" "$patched_apk.aligned"
+			mv -f "$patched_apk.aligned" "$patched_apk"
+
+			java -jar "$APKSIGNER" sign \
+				--ks ${KEYSTORE_FILE} \
+				--ks-pass pass:${KEYSTORE_PASSWORD} \
+				--ks-key-alias ${KEY_ALIAS} \
+				--key-pass pass:${KEY_PASSWORD} \
+				"$patched_apk"
+		else
+			epr "WARNING: zipalign not found! APK install will likely fail."
 		fi
 		if [ "$build_mode" = apk ]; then
 			local apk_output="${BUILD_DIR}/${app_name_l}-${rv_brand_f}-v${version_f}-${arch_f}.apk"
