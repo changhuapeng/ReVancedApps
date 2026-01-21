@@ -600,6 +600,7 @@ build_rv() {
 	if [ "${args[patcher_args]}" ]; then p_patcher_args+=("${args[patcher_args]}"); fi
 	for build_mode in "${build_mode_arr[@]}"; do
 		patcher_args=("${p_patcher_args[@]}")
+		patcher_args+=("--unsigned")
 		pr "Building '${table}' in '$build_mode' mode"
 		if [ -n "$microg_patch" ]; then
 			patched_apk="${TEMP_DIR}/${app_name_l}-${rv_brand_f}-${version_f}-${arch_f}-${build_mode}.apk"
@@ -622,7 +623,7 @@ build_rv() {
 		if [ "${args[riplib]}" = true ]; then
 			patcher_args+=("--rip-lib x86_64 --rip-lib x86")
 			if [ "$build_mode" = module ]; then
-				patcher_args+=("--rip-lib arm64-v8a --rip-lib armeabi-v7a --unsigned")
+				patcher_args+=("--rip-lib arm64-v8a --rip-lib armeabi-v7a")
 			else
 				if [ "$arch" = "arm64-v8a" ]; then
 					patcher_args+=("--rip-lib armeabi-v7a")
@@ -649,17 +650,17 @@ build_rv() {
 
 			$ZIPALIGN -p -f 4 "$patched_apk" "$patched_apk.aligned"
 			mv -f "$patched_apk.aligned" "$patched_apk"
-
+		else
+			epr "WARNING: zipalign not found! APK install will likely fail."
+		fi
+		if [ "$build_mode" = apk ]; then
 			java -jar "$APKSIGNER" sign \
 				--ks ${KEYSTORE_FILE} \
 				--ks-pass pass:${KEYSTORE_PASSWORD} \
 				--ks-key-alias ${KEY_ALIAS} \
 				--key-pass pass:${KEY_PASSWORD} \
 				"$patched_apk"
-		else
-			epr "WARNING: zipalign not found! APK install will likely fail."
-		fi
-		if [ "$build_mode" = apk ]; then
+
 			local apk_output="${BUILD_DIR}/${app_name_l}-${rv_brand_f}-v${version_f}-${arch_f}.apk"
 			mv -f "$patched_apk" "$apk_output"
 			pr "Built ${table} (non-root): '${apk_output}'"
